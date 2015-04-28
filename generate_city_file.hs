@@ -1,4 +1,5 @@
 import Data.Char
+import Data.List
 
 
 data Point = Point Float Float
@@ -16,9 +17,13 @@ distance (Point px py) (Point qx qy) = sqrt((px - qx)*(px - qx) + (py - qy)*(py 
 weight :: Vertex -> Vertex -> Float
 weight (Vertex _ l1) (Vertex _ l2) = distance l1 l2
 
-shortestPath :: [Vertex] -> [Int]
-shortestPath _ = [1, 2, 3]  -- TODO: implement
+shortestPath :: [Vertex] -> [Float]
+shortestPath vertices = map pathLength $ permutations vertices
 
+pathLength :: [Vertex] -> Float
+pathLength vertices = sum $ zipWith distance start end
+    where start = [p | Vertex n p <- vertices]
+          end = drop 1 $ cycle start
 
 -- Read in a list of city locations from standard input (each line should have
 -- two space-separated floating point numbers).  Print out the solution to the
