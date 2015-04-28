@@ -25,7 +25,6 @@ shortestPath vertices = [n | Vertex n p <- shortest]
 comparePath :: (Float, [Vertex]) -> [Vertex] -> (Float, [Vertex])
 comparePath (mpl, mp) p = if pl < mpl then (pl, p) else (mpl, mp) where pl = pathLength p
 
-
 pathLength :: [Vertex] -> Float
 pathLength vertices = sum $ zipWith distance start end
     where start = [p | Vertex n p <- vertices]
