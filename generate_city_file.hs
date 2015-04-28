@@ -17,8 +17,14 @@ distance (Point px py) (Point qx qy) = sqrt((px - qx)*(px - qx) + (py - qy)*(py 
 weight :: Vertex -> Vertex -> Float
 weight (Vertex _ l1) (Vertex _ l2) = distance l1 l2
 
-shortestPath :: [Vertex] -> [Float]
-shortestPath vertices = map pathLength $ permutations vertices
+shortestPath :: [Vertex] -> [Int]
+shortestPath vertices = [n | Vertex n p <- shortest]
+    where firstPath:otherPaths = permutations vertices
+          (_, shortest) = foldl comparePath (pathLength firstPath, firstPath) otherPaths
+
+comparePath :: (Float, [Vertex]) -> [Vertex] -> (Float, [Vertex])
+comparePath (mpl, mp) p = if pl < mpl then (pl, p) else (mpl, mp) where pl = pathLength p
+
 
 pathLength :: [Vertex] -> Float
 pathLength vertices = sum $ zipWith distance start end
